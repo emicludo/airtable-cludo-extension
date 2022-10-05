@@ -1,8 +1,13 @@
-function isRecordSelected(recordId: string, selectedIdList: string[]) : boolean {
-  console.log(selectedIdList)
-  console.log(recordId)
-  console.log("------------")
-  return selectedIdList.includes(recordId);
+import { CludoIndexElement } from "../interfaces";
+
+/**
+ * @param  {CludoIndexElement} object
+ * @returns a CludoIndexElement without valid and id properties
+ */
+function removeValidandId(object: CludoIndexElement) : CludoIndexElement {
+  // eslint-disable-next-line no-unused-vars
+  const {valid, id, ...newObject } = object
+  return newObject;
 }
 
-export {isRecordSelected};
+export {removeValidandId};

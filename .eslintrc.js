@@ -26,4 +26,5 @@ module.exports = {
             version: 'detect',
         },
     },
+    parser: '@typescript-eslint/parser'
 };

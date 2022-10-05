@@ -16,7 +16,6 @@ export interface CludoIndexElement {
     Title: string
     Description: string
     Url: string
-    valid: boolean
     [x: string]: CludoFieldType | string | number | boolean
 }
 
