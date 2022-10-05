@@ -1,5 +1,6 @@
 import React from 'react';
 
+//Airtable Blocks
 import { Box, Button, FormField, Input, Text, Loader } from '@airtable/blocks/ui';
 
 type FormProps = {
@@ -24,35 +25,35 @@ type FormProps = {
  * @param  {boolean} loader turns on/off the loader rendering
  */
 export default function Form({
-    customerId,
-    apiKey,
-    crawlerId,
-    indexDoc,
-    message,
-    handleOnChange,
-    loader
-  }: FormProps ) {
+  customerId,
+  apiKey,
+  crawlerId,
+  indexDoc,
+  message,
+  handleOnChange,
+  loader
+}: FormProps ) {
   return (
     <Box margin={3}>
       <FormField label="Customer Id">
-          <Input name="customerId" value={customerId.toString()} onChange={(e) => handleOnChange(e)} />
+        <Input name="customerId" value={customerId.toString()} onChange={(e) => handleOnChange(e)} />
       </FormField>
       <FormField label="Api Key">
-          <Input name="apiKey" value={apiKey} onChange={(e) => handleOnChange(e)} />
+        <Input name="apiKey" value={apiKey} onChange={(e) => handleOnChange(e)} />
       </FormField>
       <FormField label="Crawler Id">
-          <Input name="crawlerId" value={crawlerId.toString()} onChange={(e) => handleOnChange(e)} />
+        <Input name="crawlerId" value={crawlerId.toString()} onChange={(e) => handleOnChange(e)} />
       </FormField>
       <Button variant="primary" 
-              icon="play" 
-              onClick={() => indexDoc()}>
+        icon="play" 
+        onClick={() => indexDoc()}>
           Sync!
       </Button>
       <Box margin={2}>
-      {
-        loader ? <Loader scale={0.3}/> :
-                message ? <Text size="large">{message}</Text>: null
-      }
+        {
+          loader ? <Loader scale={0.3}/> :
+            message ? <Text size="large">{message}</Text>: null
+        }
       </Box> 
     </Box> 
   )

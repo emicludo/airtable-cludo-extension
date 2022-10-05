@@ -1,5 +1,7 @@
 // Interfaces
 import { ATRecord, ATField, CludoIndexElement } from '../interfaces';
+
+//Airtable Blocks
 import { FieldType } from '@airtable/blocks/models';
 
 /**
@@ -21,7 +23,7 @@ function recordListConverter(recordList: ATRecord[], visibleFields: ATField[]) :
  * @remarks Title, Description and Url are required fields when adding a new document to Cludo's indexes.
  */
 function singleRecordConverter(atRecord: ATRecord, visibleFields: ATField[]) : CludoIndexElement {
-  let newCludoRecord: CludoIndexElement = {
+  const newCludoRecord: CludoIndexElement = {
     Title: '' ,
     Description: '',
     Url: '',

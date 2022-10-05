@@ -1,13 +1,7 @@
 import React from 'react';
 
-import { 
-    initializeBlock,
-    useBase,
-    useWatchable,
-    useGlobalConfig,
-    useCursor,
-    useLoadable
-} from '@airtable/blocks/ui';
+//Airtable Blocks
+import { initializeBlock, useBase, useWatchable, useGlobalConfig, useCursor, useLoadable } from '@airtable/blocks/ui';
 
 //Custom components
 import Synchronizer from './components/Synchronizer';
