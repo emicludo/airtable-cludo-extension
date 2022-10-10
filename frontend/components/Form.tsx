@@ -24,7 +24,7 @@ type FormProps = {
  * @param  {Function} handleOnChange updates the globalConfig variables when the input fields from the form are changed
  * @param  {boolean} loader turns on/off the loader rendering
  */
-export default function Form({
+function Form({
   customerId,
   apiKey,
   crawlerId,
@@ -58,3 +58,5 @@ export default function Form({
     </Box> 
   )
 }
+
+export default Form;

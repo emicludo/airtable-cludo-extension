@@ -1,35 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 //Airtable Blocks
-import { initializeBlock, useBase, useWatchable, useGlobalConfig, useCursor, useLoadable } from '@airtable/blocks/ui';
+import { initializeBlock, useSettingsButton } from '@airtable/blocks/ui';
 
 //Custom components
-import Synchronizer from './components/Synchronizer';
+import CludoCrawlerExtension from './CludoCrawlerExtension';
+import SettingsForm from './components/SettingsForm';
 
 /**
-    Main component to be injected into the Airtable Extensions context.
-    @returns a Synchronizer if users has selected view or table, or null.
-    @remarks This component uses Airtable Blocks hooks such as useBase, useGlobalConfig, useCursor, 
-    useWatchable, useLoadable to keep track of the users' interactions with Airtable UI.
+ * Main component to be injected into the Airtable Extensions context.
+ * @returns a Synchronizer if users has selected view or table.
+ * @remarks This component uses Airtable Blocks hooks such as useBase, useGlobalConfig, useCursor, 
+ * useWatchable, useLoadable to keep track of the users' interactions with Airtable UI.
  */
-function CludoCrawlerExtension() {
-  const base = useBase();
-  const globalConfig = useGlobalConfig();
-  const cursor = useCursor();
-  // useWatchable is used to re-render the app whenever the active table, view, or selected fields change.
-  useWatchable(cursor, ['activeTableId', 'activeViewId', 'selectedFieldIds']);
-  // load selected records and fields
-  useLoadable(cursor);
+function App() {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
-  const table = cursor.activeTableId ? base.getTableByIdIfExists(cursor.activeTableId) : null;
-  const view = cursor.activeViewId && table ? table.getViewByIdIfExists(cursor.activeViewId) : null;
-
-  if (table && view) {
-      return <Synchronizer table={table} view={view} globalConfig={globalConfig} cursor={cursor}/>;
-  } else {
-      // Still loading table and/or view.
-      return null;
+  if (isSettingsOpen) {
+    return <SettingsForm setIsSettingsOpen={setIsSettingsOpen}/>
   }
+  return <CludoCrawlerExtension />
 }
 
-initializeBlock(() => <CludoCrawlerExtension />);
+initializeBlock(() => <App />);
