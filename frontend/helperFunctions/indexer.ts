@@ -2,7 +2,7 @@ import { CludoClient } from "@cludo/cludo-api-client";
 import { CludoApiResult } from "@cludo/cludo-api-client/dist/interfaces/client-api-result.interface";
 import { CludoIndexElement } from "../interfaces";
 
-type IndexResponse = {
+type IndexingResult = {
   errorCount: number
   totalPushed: number
 }
@@ -12,13 +12,16 @@ type IndexResponse = {
  * @param  {CludoIndexElement[]} listToIndex
  * @param  {CludoClient} searchClient
  * @param  {any} crawlerId
- * @returns {Promise<IndexResponse>} Returns a Promise of an IndexResponse which includes the number of errors registered
+ * @returns {Promise<IndexingResult>} Returns a Promise of an IndexingResult which includes the number of errors registered
  * and the total documents pushed succesfully
  */
-async function parallelIndexDoc(listToIndex: CludoIndexElement[], searchClient: CludoClient, crawlerId: any): Promise<IndexResponse> {
+async function parallelIndexDoc( listToIndex: CludoIndexElement[], 
+                                 searchClient: CludoClient, 
+                                 crawlerId: any) 
+                                 : Promise<IndexingResult> {
 
-  let promises: Promise<CludoApiResult<void>>[] = [];
-  let totalErrors: number = 0;
+  const promises: Promise<CludoApiResult<void>>[] = [];
+  let totalErrors = 0;
 
   listToIndex.forEach(record => {
     promises.push(searchClient.content.indexDocument(crawlerId, record));

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 
-import { Box, Button, useViewMetadata } from '@airtable/blocks/ui';
+import { Box, useViewMetadata } from '@airtable/blocks/ui';
 import { Field, View } from '@airtable/blocks/models';
 import FieldItem from './FieldItem';
 import { toggleElementInArray } from '../../helperFunctions/arrayHelpers';
 
 export interface FieldListProps {
   view: View
-  setSelectedFields: any
+  setSelectedFields: (newFields: Field[]) => void;
   selectedFields: Field[]
   children: React.ReactNode
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 //Airtable Blocks
-import { Box, Heading, Text, useViewMetadata, useRecords, Button, Loader } from '@airtable/blocks/ui';
+import { Box, Heading, Text, useRecords, Button, Loader } from '@airtable/blocks/ui';
 import { Table, View, Cursor, Field } from '@airtable/blocks/models';
 import GlobalConfig from '@airtable/blocks/dist/types/src/global_config';
 
@@ -14,7 +14,6 @@ import { removeValidandId } from '../helperFunctions/filterFunctions';
 import { parallelIndexDoc } from '../helperFunctions/indexer'
 
 //Custom components
-import Form from './Form';
 import FieldList from './FieldList/FieldList';
 
 export interface SynchronizerProps {
@@ -26,12 +25,11 @@ export interface SynchronizerProps {
 
 function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
   //Local State
-  let [message, setMessage] = useState('');
+  const [message, setMessage] = useState('');
   const [loader, setLoader] = useState(false);
   const [selectedFields, setSelectedFields] = useState<Field[]>([]);
 
   //Airtable Hooks
-  const viewMetadata = useViewMetadata(view);
   const records = useRecords(table);
 
   const customerId: any = globalConfig.get('customerId');
@@ -82,7 +80,7 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
     }
     
     setLoader(true);
-    let response = await parallelIndexDoc(validRecords, searchClient, crawlerId)
+    const response = await parallelIndexDoc(validRecords, searchClient, crawlerId)
     setLoader(false)
 
     setMessage(response.totalPushed + " rows have been pushed. \n\n" + (cludoRecordList.length - validRecords.length) + " records were ignored because of missings fields.")

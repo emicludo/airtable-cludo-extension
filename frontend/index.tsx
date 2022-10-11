@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 //Airtable Blocks
-import { initializeBlock, useSettingsButton } from '@airtable/blocks/ui';
+import { initializeBlock, useSettingsButton      } from '@airtable/blocks/ui';
 
 //Custom components
 import CludoCrawlerExtension from './CludoCrawlerExtension';
@@ -14,7 +14,8 @@ import SettingsForm from './components/SettingsForm';
  * useWatchable, useLoadable to keep track of the users' interactions with Airtable UI.
  */
 function App() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  //Use Settings Hook
   useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
   if (isSettingsOpen) {

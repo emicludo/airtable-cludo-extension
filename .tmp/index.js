@@ -24,5 +24,5 @@ window['_airtableRunBlock'] = function runBlock() {
 
     // Requiring the entry point file runs user code. Be sure to do any setup
     // above this line.
-    require("./../frontend/index.tsx");
+    require("./..\\frontend\\index.tsx");
 };

@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 
-import {
-  Box,
-  Button, Icon,
-} from '@airtable/blocks/ui';
+import { Box, Button } from '@airtable/blocks/ui';
 import { Field } from '@airtable/blocks/models';
 
 export interface FieldItemProps {
   field: Field
-  handleSelectField: Function
+  handleSelectField: (newField: Field) => void;
 }
 
 function FieldItem({ field, handleSelectField }: FieldItemProps) {
-  let [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(true);
 
   const handleClick= () => {
     setChecked(!checked)

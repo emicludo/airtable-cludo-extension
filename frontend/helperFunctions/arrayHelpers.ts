@@ -6,14 +6,19 @@ function arrayOfObjectsToString<T>(array: Array<T>) : string {
   return array.map(obj => JSON.stringify(obj)).flat(1).toString()
 }
 
-
-function toggleElementInArray<T>(array: Array<T>, name: T): Array<T> {
-  const exists = array.includes(name)
+/**
+ * @param  {T[]} array
+ * @param  {T} element
+ * @returns {T[]} the same array with the the element removed (if It was already contained) or
+ * added if the element wasn't in the array already
+*/
+function toggleElementInArray<T>(array: Array<T>, element: T): Array<T> {
+  const exists = array.includes(element)
   if (exists) {
-    return array.filter((c) => { return c !== name })
+    return array.filter((c) => { return c !== element })
   } else {
     const result = array
-    result.push(name)
+    result.push(element)
     return result
   }
 }
