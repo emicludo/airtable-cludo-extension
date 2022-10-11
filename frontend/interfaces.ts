@@ -1,5 +1,3 @@
-import { Field } from '@airtable/blocks/models';
-
 export enum CludoFieldType {
     Number = 'number',
     Date = 'date',
@@ -16,8 +14,8 @@ export interface CludoIndexElement {
 
 export interface CludoRecordField {
     fieldName: string
-    type: CludoFieldType
-    value: any
+    type: string
+    value: CludoFieldType
 }
 
 export interface CludoRecord {

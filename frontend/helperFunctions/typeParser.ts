@@ -1,5 +1,5 @@
 // Interfaces
-import {  CludoIndexElement } from '../interfaces';
+import { CludoIndexElement } from '../interfaces';
 
 //Airtable Blocks
 import { FieldType, Field, Record } from '@airtable/blocks/models';
