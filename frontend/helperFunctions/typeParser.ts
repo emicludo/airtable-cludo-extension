@@ -1,8 +1,8 @@
 // Interfaces
-import { ATRecord, ATField, CludoIndexElement } from '../interfaces';
+import { ATRecord, CludoIndexElement } from '../interfaces';
 
 //Airtable Blocks
-import { FieldType } from '@airtable/blocks/models';
+import { FieldType, Field } from '@airtable/blocks/models';
 
 //Helper Functions
 import { arrayOfObjectsToString } from './arrayHelpers'
@@ -10,10 +10,10 @@ import { arrayOfObjectsToString } from './arrayHelpers'
 /**
  * Converts a list of Airtable Records (ATRecord[]) to a list of CludoIndexElement[]
  * @param  {ATRecord[]} recordList //Records extracted from the Airtable table
- * @param  {ATField[]} visibleFields //Fields present in the selected Airtable table
+ * @param  {Field[]} visibleFields //Fields present in the selected Airtable table
  * @returns {CludoIndexElement[]} A list of CludoIndexElement, in the format to be pushed to Cludo's API
  */
-function recordListConverter(recordList: ATRecord[], visibleFields: ATField[]): CludoIndexElement[] {
+function recordListConverter(recordList: ATRecord[], visibleFields: Field[]): CludoIndexElement[] {
   return recordList.map((rec: ATRecord): CludoIndexElement => {
     return singleRecordConverter(rec, visibleFields);
   });
@@ -26,7 +26,7 @@ function recordListConverter(recordList: ATRecord[], visibleFields: ATField[]): 
  * @param  {ATField[]} visibleFields
  * @remarks Title, Description and Url are required fields when adding a new document to Cludo's indexes.
  */
-function singleRecordConverter(atRecord: ATRecord, visibleFields: ATField[]): CludoIndexElement {
+function singleRecordConverter(atRecord: ATRecord, visibleFields: Field[]): CludoIndexElement {
   const newCludoRecord: CludoIndexElement = {
     Title: '',
     Description: '',
@@ -34,7 +34,7 @@ function singleRecordConverter(atRecord: ATRecord, visibleFields: ATField[]): Cl
     valid: false, //default is false until validation
     id: atRecord.id
   };
-  visibleFields.forEach((field: ATField) => {
+  visibleFields.forEach((field: Field) => {
     //getCellValue retrieves the value of a cell matching the Record or row passed (atRecord) and Field or column (field.name)
     if (atRecord.getCellValue(field.name)) {
       switch (field.name.toLowerCase()) { //Makes Url, title and description case insensitive (avoids failures because they are required)

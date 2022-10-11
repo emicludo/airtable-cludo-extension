@@ -1,5 +1,4 @@
-import { FieldType } from '@airtable/blocks/models';
-/* eslint-disable no-unused-vars */
+import { Field } from '@airtable/blocks/models';
 
 export enum CludoFieldType {
     Number = 'number',
@@ -23,12 +22,7 @@ export interface CludoRecordField {
 
 export interface ATRecord {
     id: string
-    getCellValue: Function
-}
-
-export interface ATField {
-    name: string
-    type: FieldType
+    getCellValue: (fieldOrIdOrName: Field | string) => unknown;
 }
 
 export interface CludoRecord {
