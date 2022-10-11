@@ -31,10 +31,15 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
 
   //Airtable Hooks
   const records = useRecords(table);
+  //Retrieve values from GlobalConfig (set in Airtable Settings)
+  const  customerId: unknown = globalConfig.get('customerId')
+  const  apiKey: unknown = globalConfig.get('apiKey')
+  const  crawlerId: unknown = globalConfig.get('crawlerId')
 
-  const customerId: any = globalConfig.get('customerId');
-  const apiKey : any  = globalConfig.get('apiKey');
-  const crawlerId: any  = globalConfig.get('crawlerId');
+  //Types assertion
+  const customerIdN = customerId as number
+  const apiKeyS = apiKey as string
+  const crawlerIdN = crawlerId as number
 
   /**
    * Indexes all rows selected by the user that pass the validations
@@ -42,23 +47,23 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
    */
   const indexDoc = async (): Promise<void> => {
     //Pre-validations
-    if (!customerId) {
+    if (!customerIdN) {
       setMessage("Customer Id is not set")
       return
     }
-    if (!apiKey) {
+    if (!apiKeyS) {
       setMessage("API key is not set")
       return
     }
-    if (!crawlerId) {
+    if (!crawlerIdN) {
       setMessage("Crawler Id is not set")
       return
     }
     //Instanciates new Cludo object, Engine??
     const searchClient = new CludoClient({
-      customerId: customerId,
+      customerId: customerIdN,
       engineId: 111111,
-      apiKey: apiKey,
+      apiKey: apiKeyS,
     });
 
     //Filters by selected rows
@@ -80,7 +85,7 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
     }
     
     setLoader(true);
-    const response = await parallelIndexDoc(validRecords, searchClient, crawlerId)
+    const response = await parallelIndexDoc(validRecords, searchClient, crawlerIdN)
     setLoader(false)
 
     setMessage(response.totalPushed + " rows have been pushed. \n\n" + (cludoRecordList.length - validRecords.length) + " records were ignored because of missings fields.")

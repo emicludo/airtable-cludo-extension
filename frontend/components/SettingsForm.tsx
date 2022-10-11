@@ -2,12 +2,18 @@ import React from 'react';
 
 import { useGlobalConfig, Box, FormField, Input, Button } from '@airtable/blocks/ui';
 
+
 function SettingsForm( setIsSettingsOpen: any) {
   const globalConfig = useGlobalConfig();
 
-  const customerId: any = globalConfig.get('customerId');
-  const apiKey : any  = globalConfig.get('apiKey');
-  const crawlerId: any  = globalConfig.get('crawlerId');
+  const  customerId: unknown = globalConfig.get('customerId')
+  const  apiKey: unknown = globalConfig.get('apiKey')
+  const  crawlerId: unknown = globalConfig.get('crawlerId')
+
+  //Types assertion
+  const customerIdN = customerId as number
+  const apiKeyS = apiKey as string
+  const crawlerIdN = crawlerId as number
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     globalConfig.setAsync(event.target.name, event.target.value);
@@ -16,13 +22,13 @@ function SettingsForm( setIsSettingsOpen: any) {
   return (
     <Box margin={3}>
       <FormField label="Customer Id">
-        <Input name="customerId" value={customerId.toString()} onChange={(e) => handleOnChange(e)} />
+        <Input name="customerId" value={customerIdN.toString()} onChange={(e) => handleOnChange(e)} />
       </FormField>
       <FormField label="Api Key">
-        <Input name="apiKey" value={apiKey} onChange={(e) => handleOnChange(e)} />
+        <Input name="apiKey" value={apiKeyS} onChange={(e) => handleOnChange(e)} />
       </FormField>
       <FormField label="Crawler Id">
-        <Input name="crawlerId" value={crawlerId.toString()} onChange={(e) => handleOnChange(e)} />
+        <Input name="crawlerId" value={crawlerIdN.toString()} onChange={(e) => handleOnChange(e)} />
       </FormField>
       <Button
         size="large"

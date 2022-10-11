@@ -11,13 +11,13 @@ type IndexingResult = {
  * Indexes all documents passed as parameter using a CludoClient instance from cludo-api-client
  * @param  {CludoIndexElement[]} listToIndex
  * @param  {CludoClient} searchClient
- * @param  {any} crawlerId
+ * @param  {number} crawlerId
  * @returns {Promise<IndexingResult>} Returns a Promise of an IndexingResult which includes the number of errors registered
  * and the total documents pushed succesfully
  */
 async function parallelIndexDoc( listToIndex: CludoIndexElement[], 
                                  searchClient: CludoClient, 
-                                 crawlerId: any) 
+                                 crawlerId: number) 
                                  : Promise<IndexingResult> {
 
   const promises: Promise<CludoApiResult<void>>[] = [];
