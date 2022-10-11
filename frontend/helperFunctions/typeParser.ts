@@ -1,20 +1,20 @@
 // Interfaces
-import { ATRecord, CludoIndexElement } from '../interfaces';
+import {  CludoIndexElement } from '../interfaces';
 
 //Airtable Blocks
-import { FieldType, Field } from '@airtable/blocks/models';
+import { FieldType, Field, Record } from '@airtable/blocks/models';
 
 //Helper Functions
 import { arrayOfObjectsToString } from './arrayHelpers'
 
 /**
  * Converts a list of Airtable Records (ATRecord[]) to a list of CludoIndexElement[]
- * @param  {ATRecord[]} recordList //Records extracted from the Airtable table
+ * @param  {Record[]} recordList //Records extracted from the Airtable table
  * @param  {Field[]} visibleFields //Fields present in the selected Airtable table
  * @returns {CludoIndexElement[]} A list of CludoIndexElement, in the format to be pushed to Cludo's API
  */
-function recordListConverter(recordList: ATRecord[], visibleFields: Field[]): CludoIndexElement[] {
-  return recordList.map((rec: ATRecord): CludoIndexElement => {
+function recordListConverter(recordList: Record[], visibleFields: Field[]): CludoIndexElement[] {
+  return recordList.map((rec: Record): CludoIndexElement => {
     return singleRecordConverter(rec, visibleFields);
   });
 }
@@ -22,11 +22,11 @@ function recordListConverter(recordList: ATRecord[], visibleFields: Field[]): Cl
 /**
  * Converts a single Airtable Record (ATRecord) to a CludoIndexElement iterating 
  * through each of the columns in the table (ATField[])
- * @param  {ATRecord} atRecord
- * @param  {ATField[]} visibleFields
+ * @param  {Record} atRecord
+ * @param  {Field[]} visibleFields
  * @remarks Title, Description and Url are required fields when adding a new document to Cludo's indexes.
  */
-function singleRecordConverter(atRecord: ATRecord, visibleFields: Field[]): CludoIndexElement {
+function singleRecordConverter(atRecord: Record, visibleFields: Field[]): CludoIndexElement {
   const newCludoRecord: CludoIndexElement = {
     Title: '',
     Description: '',

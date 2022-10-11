@@ -20,11 +20,6 @@ export interface CludoRecordField {
     value: any
 }
 
-export interface ATRecord {
-    id: string
-    getCellValue: (fieldOrIdOrName: Field | string) => unknown;
-}
-
 export interface CludoRecord {
     id: string
     content: CludoRecordField[]
