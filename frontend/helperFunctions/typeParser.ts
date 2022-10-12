@@ -2,7 +2,7 @@
 import { CludoIndexElement, FieldWithAlias } from '../interfaces';
 
 //Airtable Blocks
-import { FieldType, Field, Record } from '@airtable/blocks/models';
+import { FieldType, Record } from '@airtable/blocks/models';
 
 //Helper Functions
 import { arrayOfObjectsToString } from './arrayHelpers'
