@@ -2,8 +2,12 @@ import React from 'react';
 
 import { useGlobalConfig, Box, FormField, Input, Button } from '@airtable/blocks/ui';
 
+export interface SettingsFormProps {
+  setIsShowingSettings: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-function SettingsForm( setIsSettingsOpen: any) {
+
+function SettingsForm({setIsShowingSettings}: SettingsFormProps) {
   const globalConfig = useGlobalConfig();
 
   const  customerId: unknown = globalConfig.get('customerId')
@@ -33,7 +37,7 @@ function SettingsForm( setIsSettingsOpen: any) {
       <Button
         size="large"
         variant="primary"
-        onClick={() => setIsSettingsOpen(false)}>
+        onClick={() => setIsShowingSettings(false)}>
           Done
       </Button>
     </Box> 

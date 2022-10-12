@@ -14,12 +14,12 @@ import SettingsForm from './components/SettingsForm/SettingsForm';
  * useWatchable, useLoadable to keep track of the users' interactions with Airtable UI.
  */
 function App() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isShowingSettings, setIsShowingSettings] = useState(false);
   //Use Settings Hook
-  useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
+  useSettingsButton(() => setIsShowingSettings(!isShowingSettings));
 
-  if (isSettingsOpen) {
-    return <SettingsForm setIsSettingsOpen={setIsSettingsOpen}/>
+  if (isShowingSettings) {
+    return <SettingsForm setIsShowingSettings={setIsShowingSettings}/>
   }
   return <CludoCrawlerExtension />
 }
