@@ -22,11 +22,11 @@ async function parallelIndexDoc( listToIndex: CludoIndexElement[],
 
   const promises: Promise<CludoApiResult<void>>[] = [];
   let totalErrors = 0;
-
+  
   listToIndex.forEach(record => {
     promises.push(searchClient.content.indexDocument(crawlerId, record));
   });
-  
+  //Resolves all calls to Cludo API
   const promResponse = await Promise.all(promises);
   //Logs errors
   promResponse.forEach((res) => {
@@ -35,7 +35,7 @@ async function parallelIndexDoc( listToIndex: CludoIndexElement[],
       console.log(res.error.code + ". This was the message: " + res.error.messages.toString());
     }
   });
-
+  // Returns an IndexingResult
   return { errorCount: totalErrors, totalPushed: (listToIndex.length-totalErrors) }
 }
 

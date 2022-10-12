@@ -1,0 +1,44 @@
+.edit-icon{
+  margin-left: 10px;
+  padding-top: 2px;
+}
+
+.field-item_container{
+  position: relative;
+}
+  .field-item_main-box > button > span {
+    display: flex;
+  }
+.field-item_edit-box{
+  position: absolute;
+  top: 32px;
+  left: 0px;
+  z-index: 9999;
+  background-color: white;
+  width: 95%;
+  min-width: 120px;
+}
+.field-item_edit-box > input{
+  background-color: white;
+  border: 1px solid grey;
+}
+
+
+.field-item_main-icon-and-name{
+  display: flex;
+}
+  .field-item_main-icon-and-name > span{
+    margin-left: 8px;
+  }
+  .field-item_main-icon-and-name > svg{
+    margin-top: 2px;
+  }
+
+
+.check-icon{
+  position: absolute;
+  right: 4px;
+  top: 9px;
+  z-index: 10000;
+  cursor: pointer;
+}

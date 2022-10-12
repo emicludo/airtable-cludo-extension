@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 //Airtable Blocks
-import { initializeBlock, useSettingsButton      } from '@airtable/blocks/ui';
+import { initializeBlock, useSettingsButton } from '@airtable/blocks/ui';
 
 //Custom components
 import CludoCrawlerExtension from './CludoCrawlerExtension';
-import SettingsForm from './components/SettingsForm';
+import SettingsForm from './components/SettingsForm/SettingsForm';
 
 /**
  * Main component to be injected into the Airtable Extensions context.

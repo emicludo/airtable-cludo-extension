@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react';
 
 import { Box, useViewMetadata } from '@airtable/blocks/ui';
-import { Field, View } from '@airtable/blocks/models';
+import { View } from '@airtable/blocks/models';
 import FieldItem from './FieldItem';
 import { toggleElementInArray } from '../../helperFunctions/arrayHelpers';
+import { FieldWithAlias } from '../../interfaces';
 
 export interface FieldListProps {
   view: View
-  setSelectedFields: (newFields: Field[]) => void;
-  selectedFields: Field[]
+  setSelectedFields: (newFields: FieldWithAlias[]) => void;
+  selectedFields: FieldWithAlias[]
   children: React.ReactNode
 }
 
 function FieldList( {view, setSelectedFields, selectedFields}: FieldListProps) {
   const viewMetadata = useViewMetadata(view);
   
-  const handleSelectField = (fieldName: Field) => {
+  const handleSelectField = (fieldName: FieldWithAlias) => {
     setSelectedFields(toggleElementInArray(selectedFields,fieldName))
   }
 
@@ -26,7 +27,7 @@ function FieldList( {view, setSelectedFields, selectedFields}: FieldListProps) {
   return (
     <>
       <Box margin={1} style={{display: 'flex', flexWrap: 'wrap'}}>
-        {viewMetadata.visibleFields.map((field: Field) => 
+        {viewMetadata.visibleFields.map((field: FieldWithAlias) => 
           <FieldItem key={field.id} field={field} handleSelectField={handleSelectField}/>
         )}
       </Box> 

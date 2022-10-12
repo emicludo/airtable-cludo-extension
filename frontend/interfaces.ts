@@ -1,3 +1,5 @@
+import { Field } from "@airtable/blocks/models"
+
 export enum CludoFieldType {
     Number = 'number',
     Date = 'date',
@@ -12,20 +14,6 @@ export interface CludoIndexElement {
     [x: string]: CludoFieldType | string | number | boolean
 }
 
-export interface CludoRecordField {
-    fieldName: string
-    type: string
-    value: CludoFieldType
-}
-
-export interface CludoRecord {
-    id: string
-    content: CludoRecordField[]
-}
-
-export interface CludoSyncBatch {
-    id: number
-    crawlerId: number
-    customerId: number
-    records: CludoRecord[]
+export interface FieldWithAlias extends Field {
+    alias?: string
 }

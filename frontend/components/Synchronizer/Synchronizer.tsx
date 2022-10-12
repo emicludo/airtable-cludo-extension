@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import './Synchronizer.css';
+
 //Airtable Blocks
 import { Box, Heading, Text, useRecords, Button, Loader } from '@airtable/blocks/ui';
 import { Table, View, Cursor, Field } from '@airtable/blocks/models';
@@ -9,12 +11,12 @@ import GlobalConfig from '@airtable/blocks/dist/types/src/global_config';
 import { CludoClient } from "@cludo/cludo-api-client";
 
 //Helper Functions
-import { recordListConverter } from '../helperFunctions/typeParser'
-import { removeValidandId } from '../helperFunctions/filterFunctions';
-import { parallelIndexDoc } from '../helperFunctions/indexer'
+import { recordListConverter } from '../../helperFunctions/typeParser'
+import { removeValidandId } from '../../helperFunctions/filterFunctions';
+import { parallelIndexDoc } from '../../helperFunctions/indexer'
 
 //Custom components
-import FieldList from './FieldList/FieldList';
+import FieldList from '../FieldList/FieldList';
 
 export interface SynchronizerProps {
     table: Table,
@@ -25,7 +27,7 @@ export interface SynchronizerProps {
 
 function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
   //Local State
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<string[]>([]);
   const [loader, setLoader] = useState(false);
   const [selectedFields, setSelectedFields] = useState<Field[]>([]);
 
@@ -46,20 +48,21 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
    * @returns {Promise<void>}
    */
   const indexDoc = async (): Promise<void> => {
+    setMessage([])
     //Pre-validations
     if (!customerIdN) {
-      setMessage("Customer Id is not set")
+      setMessage(["Customer Id is not set"])
       return
     }
     if (!apiKeyS) {
-      setMessage("API key is not set")
+      setMessage(["API key is not set"])
       return
     }
     if (!crawlerIdN) {
-      setMessage("Crawler Id is not set")
+      setMessage(["Crawler Id is not set"])
       return
     }
-    //Instanciates new Cludo object, Engine??
+    //Instantiates new Cludo object, Engine??
     const searchClient = new CludoClient({
       customerId: customerIdN,
       engineId: 111111,
@@ -69,7 +72,7 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
     //Filters by selected rows
     const selectedRecords = records.filter(record =>  cursor.selectedRecordIds.includes(record.id))
     if (selectedRecords.length==0) {
-      setMessage("Please select some records from the table before syncing.")
+      setMessage(["Please select some records from the table before syncing."])
       return
     }
     
@@ -78,20 +81,27 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
 
     //Filters only valid records (with Title, URL and Description fields)
     const validRecords = cludoRecordList.filter(record => record.valid)
-      .map(rec => removeValidandId(rec));
+                                        .map(rec => removeValidandId(rec));
     if (validRecords.length==0) {
-      setMessage("The selected records are not valid. Please check that Url, Description and Title fields are filled and in an appropiate format ('URL' for Url and 'Long text'/'Single Line text' for Title and Description")
+      setMessage(["The selected records are not valid. Please check that Url, Description and Title fields are filled and in an appropiate format ('URL' for Url and 'Long text'/'Single Line text' for Title and Description"])
       return
     }
     
     setLoader(true);
-    const response = await parallelIndexDoc(validRecords, searchClient, crawlerIdN)
-    setLoader(false)
+    const response = await parallelIndexDoc(validRecords, searchClient, crawlerIdN);
 
-    setMessage(response.totalPushed + " rows have been pushed. \n\n" + (cludoRecordList.length - validRecords.length) + " records were ignored because of missings fields.")
-    if (response.errorCount > 0) {
-      setMessage(message + "\n\n An error ocurred while pushing " + response.errorCount + " valid records, please check the console for more information.")
+    //Prepares Feedback response message
+    const newMessage: string[] = []
+    newMessage.push(response.totalPushed + " rows have been pushed.")
+
+    if ((cludoRecordList.length - validRecords.length) > 0) {
+      newMessage.push((cludoRecordList.length - validRecords.length) + " records were ignored because of missings fields.")
     }
+    if (response.errorCount > 0) {
+      newMessage.push("An error ocurred while pushing " + response.errorCount + " valid records, please check the console for more information.")
+    }
+    setMessage(newMessage);
+    setLoader(false);
   }
 
   return (
@@ -117,15 +127,17 @@ function Synchronizer ({table, view, globalConfig, cursor}: SynchronizerProps) {
           selectedFields={selectedFields}>
         </FieldList>
       </Box>
-      <Button variant="primary" 
+      <Button 
+        className='sync-button'
+        variant="primary" 
         icon="play" 
         onClick={() => indexDoc()}>
           Sync!
       </Button>
-      <Box margin={2}>
+      <Box margin={2} padding={3}>
         {
           loader ? <Loader scale={0.3}/> :
-            message ? <Text size="large">{message}</Text>: null
+            message ? message.map(mes => <Text key={mes} size="large">{mes}</Text>): null
         }
       </Box> 
     </Box>

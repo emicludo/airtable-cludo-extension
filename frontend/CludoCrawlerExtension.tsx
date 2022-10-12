@@ -4,7 +4,7 @@ import React from 'react';
 import { useBase, useWatchable, useGlobalConfig, useCursor, useLoadable } from '@airtable/blocks/ui';
 
 //Custom components
-import Synchronizer from './components/Synchronizer';
+import Synchronizer from './components/Synchronizer/Synchronizer';
 
 /**
  * Main component to be injected into the Airtable Extensions context.

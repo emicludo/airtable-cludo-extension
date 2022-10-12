@@ -1,5 +1,5 @@
 // Interfaces
-import { CludoIndexElement } from '../interfaces';
+import { CludoIndexElement, FieldWithAlias } from '../interfaces';
 
 //Airtable Blocks
 import { FieldType, Field, Record } from '@airtable/blocks/models';
@@ -10,10 +10,10 @@ import { arrayOfObjectsToString } from './arrayHelpers'
 /**
  * Converts a list of Airtable Records (ATRecord[]) to a list of CludoIndexElement[]
  * @param  {Record[]} recordList //Records extracted from the Airtable table
- * @param  {Field[]} visibleFields //Fields present in the selected Airtable table
+ * @param  {FieldWithAlias[]} visibleFields //Fields present in the selected Airtable table
  * @returns {CludoIndexElement[]} A list of CludoIndexElement, in the format to be pushed to Cludo's API
  */
-function recordListConverter(recordList: Record[], visibleFields: Field[]): CludoIndexElement[] {
+function recordListConverter(recordList: Record[], visibleFields: FieldWithAlias[]): CludoIndexElement[] {
   return recordList.map((rec: Record): CludoIndexElement => {
     return singleRecordConverter(rec, visibleFields);
   });
@@ -23,21 +23,24 @@ function recordListConverter(recordList: Record[], visibleFields: Field[]): Clud
  * Converts a single Airtable Record (ATRecord) to a CludoIndexElement iterating 
  * through each of the columns in the table (ATField[])
  * @param  {Record} atRecord
- * @param  {Field[]} visibleFields
+ * @param  {FieldWithAlias[]} visibleFields
  * @remarks Title, Description and Url are required fields when adding a new document to Cludo's indexes.
  */
-function singleRecordConverter(atRecord: Record, visibleFields: Field[]): CludoIndexElement {
+function singleRecordConverter(atRecord: Record, visibleFields: FieldWithAlias[]): CludoIndexElement {
   const newCludoRecord: CludoIndexElement = {
     Title: '',
     Description: '',
     Url: '',
     valid: false, //default is false until validation
-    id: atRecord.id
+    Id: atRecord.id,
   };
-  visibleFields.forEach((field: Field) => {
+ 
+  visibleFields.forEach((field: FieldWithAlias) => {
+    //Swaps fields with Alias:
+    const aliasFieldName = field.alias ? field.alias : field.name;
     //getCellValue retrieves the value of a cell matching the Record or row passed (atRecord) and Field or column (field.name)
     if (atRecord.getCellValue(field.name)) {
-      switch (field.name.toLowerCase()) { //Makes Url, title and description case insensitive (avoids failures because they are required)
+      switch (aliasFieldName.toLowerCase()) { //Makes Url, title and description case insensitive (avoids failures because they are required)
       case "url":
         newCludoRecord["Url"] = convertContentType(atRecord.getCellValue(field.name), field.type).toString()
         break;
@@ -48,7 +51,7 @@ function singleRecordConverter(atRecord: Record, visibleFields: Field[]): CludoI
         newCludoRecord["Description"] = convertContentType(atRecord.getCellValue(field.name), field.type).toString()
         break;
       default:
-        newCludoRecord[addSuffix(field.name,field.type)] = convertContentType(atRecord.getCellValue(field.name), field.type)
+        newCludoRecord[addSuffix(aliasFieldName,field.type)] = convertContentType(atRecord.getCellValue(field.name), field.type)
         break;
       }
     }
@@ -57,6 +60,7 @@ function singleRecordConverter(atRecord: Record, visibleFields: Field[]): CludoI
   if (newCludoRecord.Title && newCludoRecord.Description && newCludoRecord.Url) {
     newCludoRecord["valid"] = true
   }
+  console.log(newCludoRecord)
   return newCludoRecord;
 }
 
@@ -118,6 +122,8 @@ function addSuffix(fieldName: string, ATfieldType: FieldType): string {
   case FieldType.PERCENT:
   case FieldType.RATING:
     return (fieldName + "_number");
+  case FieldType.BARCODE:
+    return (fieldName + "_edge_ngram");
   default:
     return fieldName;
   }
